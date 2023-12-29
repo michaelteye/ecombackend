@@ -1,24 +1,24 @@
 import { NestFactory } from '@nestjs/core';
-import { AppModule } from './app.module';
+import { DocumentBuilder, SwaggerModule } from "@nestjs/swagger";
+import * as session from "express-session";
 import * as passport from 'passport';
-import * as session from "express-session"
-import { SwaggerModule, DocumentBuilder } from "@nestjs/swagger"
-import { ValidationPipe } from '@nestjs/common';
-import { ClientsModule } from './clients/clients.module';
-import { Authmodule } from './authUsers/authUser.module';
-import { ProductModule } from './models/product/product.module';
-import { WishListModule } from './models/wishlist/wishlist.module';
-import { CartModule } from './models/shoppingCartsAndOrders/shoppingCartsAndOrders.module';
+import { AppModule } from './app.module';
+import { Authmodule } from './modules/authUsers/authUser.module';
+import { ClientsModule } from './modules/clients/clients.module';
+import { ProductModule } from './modules/product/product.module';
+import { CartModule } from './modules/shoppingCartsAndOrders/shoppingCartsAndOrders.module';
+import { WishListModule } from './modules/wishlist/wishlist.module';
 
 async function bootstrap(){
   const app = await NestFactory.create(AppModule);
   //setting the swagger
-  const config = new DocumentBuilder()
+  const config = new DocumentBuilder() 
   .setTitle('set ring info')
   .setDescription('The set ring API description')
   .setVersion('1.0')
   .addTag('ring')
   .build();
+  app.enableCors();
   const document = SwaggerModule.createDocument(app,config,
     {
       include: [

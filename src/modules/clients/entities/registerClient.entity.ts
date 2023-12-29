@@ -27,10 +27,10 @@ export class Client extends AbstractEntity {
   @OneToMany(() => OrderEntity, (items) => items.userId)
     items: OrderEntity[];
 
-  @Column({ type: 'varchar', length: 50, nullable:false })
+  @Column({ type: 'varchar', length: 50, nullable:true })
   firstName: string;
 
-  @Column({ type: 'varchar', length: 50, nullable: false })
+  @Column({ type: 'varchar', length: 50, nullable: true })
   lastName: string;
 
   @Column({ type: 'varchar', length: 250, nullable: true })

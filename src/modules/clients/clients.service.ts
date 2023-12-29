@@ -38,7 +38,6 @@ export class ClientsService {
                if(input.password.length < 8 ){
                   throw new HttpException('Password must be at least 8 characters',HttpStatus.BAD_REQUEST);
                }
-
                if(input.password && (input.password.length) < 8){
                      throw new HttpException('This Password is already exist',HttpStatus.CONFLICT);
                }

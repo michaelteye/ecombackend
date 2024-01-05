@@ -20,6 +20,7 @@ import { AdminUserController } from './controllers/adminUser.controller';
 import { AdminEntity } from './entities/admin_user.entity';
 import { RoleAuthGuard } from './guards/roles.auth.guard';
 import { ConfigService } from '@nestjs/config';
+import { BlacklistService } from './services/authUserLogOut.service';
 
 
 @Module({
@@ -42,7 +43,8 @@ import { ConfigService } from '@nestjs/config';
     GoogleStrategy,
     SessionSerializer,
     RoleAuthGuard,
-    ConfigService
+    ConfigService,
+    BlacklistService
   ],
   exports: [AuthService,AdminService,RoleAuthGuard,],
   controllers: [AuthController,AdminUserController],

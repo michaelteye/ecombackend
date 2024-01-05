@@ -6,6 +6,7 @@ import { JwtService } from '@nestjs/jwt';
 import { authUserDto, signInDto } from '../dtos/authUsers.dto';
 import * as bcrypt from 'bcrypt';
 import { MailerService } from '@nestjs-modules/mailer';
+import { BlacklistService } from './authUserLogOut.service';
 import {
   HttpException,
   HttpStatus,
@@ -42,7 +43,8 @@ export class AuthService {
     @InjectRepository(authEntity)
     private readonly authRepository: Repository<authEntity>,
     private jwtService: JwtService,
-    private readonly mailerService: MailerService
+    private readonly mailerService: MailerService,
+    private blacklistService: BlacklistService
   ) {}
 
   async validateUser(email: string, password: string): Promise<any> {
@@ -101,6 +103,14 @@ export class AuthService {
       throw new HttpException(err.message, HttpStatus.UNAUTHORIZED);
     }
   }
+
+
+  async logout(token: string): Promise<void> {
+    // Add the token to the blacklist upon logout
+    this.blacklistService.addToBlacklist(token);
+    // Perform any other necessary cleanup
+  }
+
 
   //
 

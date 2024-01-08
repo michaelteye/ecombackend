@@ -7,7 +7,6 @@ export class BlacklistService {
   addToBlacklist(token: string): void{
     this.revokedTokens.add(token);
   }
-
   isTokenRevoked(token: string): boolean{
     return this.revokedTokens.has(token);
   }

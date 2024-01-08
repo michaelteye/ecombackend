@@ -29,9 +29,9 @@ export class RoleAuthGuard implements CanActivate {
         return true;
       }
       
-      throw new HttpException('Unauthorized', 401);
+      throw new HttpException('you are not authorized to create category', 401);
     } catch (error) {
-      throw new HttpException('Unauthorized', 401);
+      throw new HttpException('you are not authorized to create category', 401);
     }
   }
 }

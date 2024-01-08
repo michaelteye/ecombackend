@@ -1,4 +1,4 @@
-import { Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { AbstractEntity } from 'src/modules/main/entities/abstract.entity';
 import { ProductCategoryEntity } from './product_categories.entity';
 import { ReviewEntity } from './review.entity';
@@ -39,8 +39,16 @@ export class ProductsEntity extends AbstractEntity{
     @Column('simple-array',{nullable:true})
     sizeOptions:string[];
 
-    @ManyToOne(() => ProductCategoryEntity, (category) => category.products)
+    @ManyToOne(() => ProductCategoryEntity, (category) => category.products,{
+        cascade: true,
+        nullable: true,
+        onDelete: 'CASCADE'
+    })  
+    @JoinColumn({ name: 'categoryId' })
     category: ProductCategoryEntity;
+
+    @Column({ type: 'uuid', nullable: true})
+    categoryId:string
 
     @OneToMany(()=>ReviewEntity, (review)=>review.product)
      product:ReviewEntity[]

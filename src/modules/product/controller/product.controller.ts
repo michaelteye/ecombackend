@@ -34,15 +34,12 @@ export class ProductController {
   })
   //useGuard goes here
   async CreateProduct(
-    @Body() productDto: ProductDto,
-    @Body() productcategoryDto: ProductCategoryDto,
+    @Body() productDto: ProductDto
   ): Promise<ProductsEntity> {
-    return await this.productService.CreateProduct(
+      return await this.productService.CreateProduct(
       productDto,
-      productcategoryDto,
     );
   }
-
   @UsePipes(new ValidationPipe())
   @Put('update/:id')
   @ApiParam({ name: 'id', required: true, type: String })

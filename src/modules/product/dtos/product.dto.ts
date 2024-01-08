@@ -109,7 +109,7 @@ export class ProductDto{
         type:ProductCategoryDto
 
     })
-    categoryId: ProductCategoryDto;
+    categoryId:  string;
 
     @IsDate()
     @ApiProperty({

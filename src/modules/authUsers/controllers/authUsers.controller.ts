@@ -41,7 +41,9 @@ export class AuthController {
   @UseGuards(LocalAuthGuard)
   @Post('login')
   async login(@Body() signInDto: signInDto):Promise<Client> {
-    return this.authService.signIn(signInDto);
+    let loginUser = await  this.authService.signIn(signInDto);
+    if (!loginUser) throw new UnauthorizedException('Please check your email and passwor')
+    return loginUser
   }
 
   @Post('logout')

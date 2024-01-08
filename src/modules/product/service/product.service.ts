@@ -12,11 +12,9 @@ export class ProductService{
         @InjectRepository(ProductCategoryEntity) private readonly categoryRepository: Repository<ProductCategoryEntity>
     ){}
 
-    async CreateProduct(input:ProductDto, cateinput:ProductCategoryDto):Promise<ProductsEntity>{
-        const newCategory = new ProductCategoryEntity();
-        newCategory.categoryName = cateinput.name
-        const createdCategory = await this.categoryRepository.save(newCategory)
-
+    async CreateProduct(input:ProductDto):Promise<ProductsEntity>{
+        const category = await this.getProductCategoryId(input.categoryId)
+        // newCategory.categoryName = cateinput.name
         //second method of creating the product
         const newproductAlert = new ProductsEntity();
         newproductAlert.name= input.name;
@@ -28,8 +26,8 @@ export class ProductService{
         newproductAlert.stockQuantity = input.stockQuantity;
         newproductAlert.thickness = input.thickness;
         newproductAlert.width = input.thickness;
-        newproductAlert.sku = input.sku
-        newproductAlert.category = createdCategory;
+        newproductAlert.sku = input.sku;
+        newproductAlert.categoryId = category.id
         console.log('the value is >>>',newproductAlert)
         return await this.productRepository.save(newproductAlert)   
     }
@@ -75,4 +73,10 @@ export class ProductService{
     
         return product;
       }
+
+
+    async getProductCategoryId(id:string):Promise<ProductCategoryEntity>{
+        return await this.categoryRepository.findOne({where:{id}})
+   ;
+    }
 }

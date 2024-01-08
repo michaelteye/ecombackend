@@ -74,6 +74,10 @@ export class AuthService {
 
       const checkUserEmail = await this.clientsService.findByEmail(email);
 
+      if(!checkUserEmail){
+          throw new UnauthorizedException('User not found')
+      }
+
       //verify password using bcrypt
       const isPasswordValid = await bcrypt.compare(
         password,
@@ -100,7 +104,8 @@ export class AuthService {
         refresh_token: refreshToken,
       };
     } catch (err) {
-      throw new HttpException(err.message, HttpStatus.UNAUTHORIZED);
+      // throw new HttpException(err.message, HttpStatus.UNAUTHORIZED);
+      throw new Error('Wrong credentials')
     }
   }
 

@@ -46,7 +46,6 @@ export class CategoryController {
   async CreateProduct(
     @Body() productcategoryDto: ProductCategoryDto
   ): Promise<ProductCategoryEntity> {
-    
     return await this.categoryService.CreateCategory(productcategoryDto);
   }
 

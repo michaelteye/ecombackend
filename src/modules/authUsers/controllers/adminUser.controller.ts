@@ -21,7 +21,6 @@ export class AdminUserController{
     constructor(
         private adminService:AdminService
     ){}
-
     @Post('register')
     async createClient(@Body() clientDto: RegisterAdmintDto): Promise<Admin> {
       return await this.adminService.CreateAdminUser(clientDto);

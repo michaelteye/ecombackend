@@ -1,7 +1,7 @@
 import { ProductCategoryEntity } from "../entities/product_categories.entity";
 import { Repository } from "typeorm";
 import { InjectRepository } from "@nestjs/typeorm";
-import { NotFoundException } from "@nestjs/common";
+import { NotFoundException,ConflictException } from "@nestjs/common";
 import { ProductCategoryDto } from "../dtos/productcategory.dto";
 
 
@@ -12,8 +12,19 @@ export class CategoriesService{
 
     async CreateCategory(input:ProductCategoryDto):Promise<ProductCategoryEntity>{
         const newCategory = new ProductCategoryEntity()
-        newCategory.categoryName = input.name
-        return await this.categoryRepository.save(newCategory)
+        const findCategory = await this.categoryRepository.findOne({where:{categoryName:input.name}})
+
+        try{
+            if(findCategory){
+                // console.log("This Category Name is already exist");
+                throw new ConflictException(`Category '${input.name}' already exists.`)
+            }
+            newCategory.categoryName = input.name
+            return await this.categoryRepository.save(newCategory)
+        }
+        catch(err){
+            console.log("Error creating category")
+        }
     }
 
     async UpdateCategory(categoryId:string, updateCategory:ProductCategoryDto):Promise<ProductCategoryEntity>{
@@ -45,6 +56,10 @@ export class CategoriesService{
         }
         return category;
       }
+
+    async getCategoryByName(categoryName: string):Promise<ProductCategoryEntity>{
+         return await this.categoryRepository.findOne({where:{categoryName:categoryName}})
+    }
 
 
 }

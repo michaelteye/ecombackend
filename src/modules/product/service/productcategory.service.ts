@@ -1,7 +1,7 @@
 import { ProductCategoryEntity } from "../entities/product_categories.entity";
 import { Repository } from "typeorm";
 import { InjectRepository } from "@nestjs/typeorm";
-import { NotFoundException,ConflictException } from "@nestjs/common";
+import { NotFoundException,ConflictException, HttpException, HttpStatus } from "@nestjs/common";
 import { ProductCategoryDto } from "../dtos/productcategory.dto";
 
 
@@ -17,13 +17,14 @@ export class CategoriesService{
         try{
             if(findCategory){
                 // console.log("This Category Name is already exist");
-                throw new ConflictException(`Category '${input.name}' already exists.`)
+                // throw new ConflictException(`Category '${findCategory}' already exists.`)
+                throw new HttpException(`Category '${findCategory}' already exists.`,HttpStatus.FORBIDDEN)
             }
             newCategory.categoryName = input.name
             return await this.categoryRepository.save(newCategory)
         }
         catch(err){
-            console.log("Error creating category")
+            throw new HttpException(`Category '${input.name}' already exists.`,HttpStatus.FORBIDDEN)
         }
     }
 

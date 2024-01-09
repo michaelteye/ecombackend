@@ -16,6 +16,7 @@ import {
   Req,
   Query,
   UseGuards,
+  ParseIntPipe,
 } from '@nestjs/common';
 import { ApiTags, ApiBearerAuth, ApiResponse, ApiParam, ApiQuery } from '@nestjs/swagger';
 import { Alias } from 'typeorm/query-builder/Alias';
@@ -77,26 +78,8 @@ export class ProductController {
     return await this.productService.DeleteProduct(productId);
   }
 
-
-  @AuthRoles(AuthUserRole.Admin) 
-  @UseGuards(JwtAuthGuard,RoleAuthGuard)
-  @Get('allproduct')
-  @ApiQuery({
-    name: 'pageNumber',
-    required: false,
-    explode: true,
-  })
-  @ApiResponse({
-    status: 201,
-    description: 'All products fetched successfully.',
-    type:ProductDto
-  })
-  async getAllProduct(): Promise<ProductsEntity[]> {
-    return await this.productService.GetAllProducts();
-  }
-
-  @AuthRoles(AuthUserRole.Admin) 
-  @UseGuards(JwtAuthGuard,RoleAuthGuard)
+  // @AuthRoles(AuthUserRole.Admin || AuthUserRole.User) 
+  // @UseGuards(JwtAuthGuard,RoleAuthGuard)
   @Get('all')
   @ApiQuery({
     name: 'pageNumber', 
@@ -108,41 +91,15 @@ export class ProductController {
     description: 'All products fetched successfully.',
     type:FilterDto
   })
-  async QueryProducts(@Query() filterDto:FilterDto, @Req() req:Request) {
-   
-    const builder = await this.productService.SearchAndFilterProducts('products');
-    if(req.query.s){
-      builder.where('products.name LIKE :s OR products.description LIKE :s', { s: `%${req.query.s}%` });
-    }
-
-    const sortProduct = req.query.sort;
-    if(sortProduct){
-      builder.orderBy('products.price', (sortProduct as string).toUpperCase() === 'DESC' ? 'DESC' : 'ASC');
-
-    }
-
-    const page:number = parseInt(req.query.page as any) || 1
-    const perPage = 9
-    const total = await builder.getCount()
-    builder.offset((page-1) * perPage).limit(perPage)
-
-    if(filterDto.name){
-      builder.andWhere('products.name LIKE :name', { name: `%${filterDto.name}%`})
-    }
-
-    if (filterDto.price) {
-      builder.andWhere('products.price >= :minPrice', { minPrice: filterDto.price });
-    }
-    
+  async GetAllVailableProduct(
+   @Query('page') page:number = 1,
+   @Query('perPage') perPage:number=20
+    ) {
+      const {product,totalPages} = await this.productService.GetAllProducts(page, perPage)
     return{
-      data: await builder.getMany(),
-        total,
-        page,
-        last_page: Math.ceil(total / perPage)
+      product,totalPages
     }
   }
-
-
   //get product by id
 
   @AuthRoles(AuthUserRole.Admin) 
@@ -157,6 +114,4 @@ export class ProductController {
   async getAsingleProduct(@Param('id') productId: string): Promise<ProductsEntity> {
     return await this.productService.getProductById(productId);
   }
-
- 
 }

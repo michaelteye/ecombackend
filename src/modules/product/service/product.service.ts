@@ -57,8 +57,21 @@ export class ProductService{
         return await this.productRepository.remove(existingProduct)
     }
 
-    async GetAllProducts():Promise<ProductsEntity[]>{
-     return await this.productRepository.find()
+    async GetAllProducts(
+        page: number = 1,
+        perPage: number = 20,
+
+    ):Promise<{product:ProductsEntity[]; totalPages:number}>{
+        const [product, total] = await this.productRepository.findAndCount({
+            order:{createdAt:'DESC'},
+            take:perPage,
+            skip:(page -1) * perPage
+        },
+        
+     )
+     console.log('the total is >>>',total)
+        const totalPages = Math.ceil( total / perPage )
+        return { product,totalPages }
     }
 
     async SearchAndFilterProducts(alias:string){

@@ -53,7 +53,7 @@ export class ProductDto{
         example:['image1','image2'],
 
     })
-    image:string[]
+    image?:string[]
 
     @IsNumber({ maxDecimalPlaces: 0, allowNaN: false }, { message: 'Stock quantity must be an integer' })
     @Min(0, { message: 'Stock quantity cannot be negative' })
@@ -116,7 +116,7 @@ export class ProductDto{
         description: 'date when this product was created',
         example: new Date(),
     })
-    CreatedAt: Date;
+    createdAt: Date;
 
     @IsDate()
     @ApiProperty({
@@ -135,7 +135,7 @@ export class FilterDto extends OmitType(ProductDto,[
     'stockQuantity',
     'thickness',
     'updatedAt',
-    'CreatedAt',
+    'createdAt',
     'sku',
     'width'
 ]){

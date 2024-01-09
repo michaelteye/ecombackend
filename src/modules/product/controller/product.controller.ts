@@ -15,9 +15,13 @@ import {
   Get,
   Req,
   Query,
+  UseGuards,
 } from '@nestjs/common';
 import { ApiTags, ApiBearerAuth, ApiResponse, ApiParam, ApiQuery } from '@nestjs/swagger';
 import { Alias } from 'typeorm/query-builder/Alias';
+import { AuthRoles, RoleAuthGuard } from 'src/modules/authUsers/guards/roles.auth.guard';
+import { AuthUserRole } from 'src/modules/authUsers/types/auth-user.roles';
+import { JwtAuthGuard } from 'src/modules/authUsers/guards/jwt-auth.guard';
 
 @ApiTags('Products')
 @ApiBearerAuth('JWT')
@@ -25,7 +29,8 @@ import { Alias } from 'typeorm/query-builder/Alias';
 export class ProductController {
   constructor(private productService: ProductService) {}
 
-  // @UsePipes(new ValidationPipe())
+  @AuthRoles(AuthUserRole.Admin)
+  @UseGuards(JwtAuthGuard,RoleAuthGuard)
   @Post('create')
   @ApiResponse({
     status: 201,
@@ -40,7 +45,8 @@ export class ProductController {
       productDto,
     );
   }
-  @UsePipes(new ValidationPipe())
+  @AuthRoles(AuthUserRole.Admin) 
+  @UseGuards(JwtAuthGuard,RoleAuthGuard)
   @Put('update/:id')
   @ApiParam({ name: 'id', required: true, type: String })
   @ApiResponse({
@@ -59,7 +65,8 @@ export class ProductController {
     return updatedProduct;
   }
 
-  @UsePipes(new ValidationPipe())
+  @AuthRoles(AuthUserRole.Admin) 
+  @UseGuards(JwtAuthGuard,RoleAuthGuard)
   @Delete('delete/:id')
   @ApiResponse({
     status: 204,
@@ -70,7 +77,9 @@ export class ProductController {
     return await this.productService.DeleteProduct(productId);
   }
 
-  @UsePipes(new ValidationPipe())
+
+  @AuthRoles(AuthUserRole.Admin) 
+  @UseGuards(JwtAuthGuard,RoleAuthGuard)
   @Get('allproduct')
   @ApiQuery({
     name: 'pageNumber',
@@ -86,10 +95,11 @@ export class ProductController {
     return await this.productService.GetAllProducts();
   }
 
-  // @UsePipes(new ValidationPipe())
+  @AuthRoles(AuthUserRole.Admin) 
+  @UseGuards(JwtAuthGuard,RoleAuthGuard)
   @Get('all')
   @ApiQuery({
-    name: 'pageNumber',
+    name: 'pageNumber', 
     required: false,
     explode: true,
   })
@@ -135,7 +145,8 @@ export class ProductController {
 
   //get product by id
 
-  @UsePipes(new ValidationPipe())
+  @AuthRoles(AuthUserRole.Admin) 
+  @UseGuards(JwtAuthGuard,RoleAuthGuard)
   @Get(':id')
   @ApiResponse({
     status: 201,

@@ -56,11 +56,8 @@ export class CategoriesService{
           throw new NotFoundException('Product not found');
         }
         return category;
-      }
-
+      } 
     async getCategoryByName(categoryName: string):Promise<ProductCategoryEntity>{
          return await this.categoryRepository.findOne({where:{categoryName:categoryName}})
     }
-
-
 }

@@ -86,7 +86,7 @@ export class ProductController {
     return await this.productService.GetAllProducts();
   }
 
-  @UsePipes(new ValidationPipe())
+  // @UsePipes(new ValidationPipe())
   @Get('all')
   @ApiQuery({
     name: 'pageNumber',

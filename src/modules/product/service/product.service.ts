@@ -73,7 +73,6 @@ export class ProductService{
         const totalPages = Math.ceil( total / perPage )
         return { product,totalPages }
     }
-
     async SearchAndFilterProducts(alias:string){
         return this.productRepository.createQueryBuilder(alias)
        }

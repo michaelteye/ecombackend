@@ -32,6 +32,7 @@ export class ProductService{
         return await this.productRepository.save(newproductAlert)   
     }
 
+
     async UpdateProduct(productId:string, updateProduct: ProductDto):Promise<ProductsEntity>{
         const existingProduct = await this.productRepository.findOne({where:{id:productId }})
         if(!existingProduct){
@@ -61,7 +62,7 @@ export class ProductService{
         page: number = 1,
         perPage: number = 20,
 
-    ):Promise<{product:ProductsEntity[]; totalPages:number}>{
+    ):Promise<{product:ProductsEntity[]; totalPages:number, pageNumbers:number[]}>{
         const [product, total] = await this.productRepository.findAndCount({
             order:{createdAt:'DESC'},
             take:perPage,
@@ -69,10 +70,31 @@ export class ProductService{
         },
         
      )
-     console.log('the total is >>>',total)
         const totalPages = Math.ceil( total / perPage )
-        return { product,totalPages }
+        console.log('the number of pages are given as >>>', product.length)
+        const pageNumbers = Array.from({ length: totalPages }, (_, i) => i + 1);
+       
+        
+        
+        return { product,totalPages,pageNumbers }
     }
+// get all wedding product
+        async GetProductsByCategory(
+            categoryId:string,
+            page: number = 1,
+            perPage: number = 20,
+        ):Promise<{productsCategory:ProductsEntity[]; totalPages:number}>{
+            const [productsCategory, total] = await this.productRepository.findAndCount({
+                where:{categoryId:categoryId},
+                order:{createdAt:'DESC'},
+                take:perPage,
+                skip:(page -1) * perPage
+            },
+            )
+            const totalPages = Math.ceil( total / perPage )
+            
+           return { productsCategory,totalPages }
+        }
     async SearchAndFilterProducts(alias:string){
         return this.productRepository.createQueryBuilder(alias)
        }

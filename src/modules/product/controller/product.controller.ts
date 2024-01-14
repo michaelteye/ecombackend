@@ -95,10 +95,32 @@ export class ProductController {
    @Query('page') page:number = 1,
    @Query('perPage') perPage:number=20
     ) {
-      const {product,totalPages} = await this.productService.GetAllProducts(page, perPage)
+      const {product,totalPages,pageNumbers} = await this.productService.GetAllProducts(page, perPage)
     return{
-      product,totalPages
+      product,totalPages,pageNumbers
     }
+  }
+
+  @Get(':categoryId')
+  @ApiQuery({
+    name: 'pageNumber', 
+    required: false,
+    explode: true,
+  })
+  @ApiResponse({
+    status: 201,
+    description: 'All products fetched successfully.',
+    type:FilterDto
+  })
+  async GetProductByCategory(
+    @Param('categoryId') categoryId:string,
+    @Query('page') page:number = 1,
+    @Query('perPage') perPage:number=20
+  ){
+   const {productsCategory,totalPages} = await this.productService.GetProductsByCategory(categoryId,page,perPage);
+   return{
+    productsCategory,totalPages
+  }
   }
   //get product by id
 

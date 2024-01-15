@@ -33,7 +33,7 @@ import { AuthUserRole } from 'src/modules/authUsers/types/auth-user.roles';
 export class CategoryController {
   constructor(private categoryService: CategoriesService) {}
 
-  // @UsePipes(new ValidationPipe())
+
   @AuthRoles(AuthUserRole.Admin)
   @UseGuards(JwtAuthGuard,RoleAuthGuard)
   @Post('create')
@@ -49,7 +49,7 @@ export class CategoryController {
     return await this.categoryService.CreateCategory(productcategoryDto);
   }
 
-  @UsePipes(new ValidationPipe())
+
   @Put('update/:id')
   @ApiParam({ name: 'id', required: true, type: String })
   @ApiResponse({
@@ -68,7 +68,7 @@ export class CategoryController {
     return updatedProduct;
   }
 
-  @UsePipes(new ValidationPipe())
+
   @Delete('delete/:id')
   @ApiResponse({
     status: 204,
@@ -79,7 +79,6 @@ export class CategoryController {
     await this.categoryService.DeleteCategory(productId);
   }
 
-  @UsePipes(new ValidationPipe())
   @Get('allcategory')
   @ApiQuery({
     name: 'pageNumber',
@@ -95,18 +94,4 @@ export class CategoryController {
     return await this.categoryService.GetAllCategory();
   }
   //get product by id
-
-  @UsePipes(new ValidationPipe())
-  @Get(':id')
-  @ApiResponse({
-    status: 201,
-    description: 'The product has been returned.',
-    type: ProductCategoryDto,
-  })
-  @ApiParam({ name: 'id', required: true, type: String })
-  async getAsingleProduct(
-    @Param('id') categoryId: string,
-  ): Promise<ProductCategoryEntity> {
-    return await this.categoryService.getCategoryById(categoryId);
-  }
 }

@@ -101,6 +101,7 @@ export class ProductController {
     }
   }
 
+
   @Get(':categoryId')
   @ApiQuery({
     name: 'pageNumber', 
@@ -124,9 +125,9 @@ export class ProductController {
   }
   //get product by id
 
-  @AuthRoles(AuthUserRole.Admin) 
-  @UseGuards(JwtAuthGuard,RoleAuthGuard)
-  @Get(':id')
+  // @AuthRoles(AuthUserRole.Admin) 
+  // @UseGuards(JwtAuthGuard,RoleAuthGuard)
+  @Get('item/:id')
   @ApiResponse({
     status: 201,
     description: 'The product has been returned.',

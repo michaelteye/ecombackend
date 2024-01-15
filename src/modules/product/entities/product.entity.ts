@@ -47,7 +47,7 @@ export class ProductsEntity extends AbstractEntity{
     @JoinColumn({ name: 'categoryId' })
     category: ProductCategoryEntity;
 
-    @Column({ type: 'uuid', nullable: true})
+    @Column({ type:'text', nullable: true})
     categoryId:string
 
     @OneToMany(()=>ReviewEntity, (review)=>review.product)

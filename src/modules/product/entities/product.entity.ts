@@ -47,15 +47,15 @@ export class ProductsEntity extends AbstractEntity{
     @JoinColumn({ name: 'categoryId' })
     category: ProductCategoryEntity;
 
-    @Column({ type:'text', nullable: true})
+    @Column({ type:'uuid', nullable: true})
     categoryId:string
 
     @OneToMany(()=>ReviewEntity, (review)=>review.product)
      product:ReviewEntity[]
 
-     @OneToMany(()=>WishListEnity,(wishlist)=>wishlist.productId)
+    @OneToMany(()=>WishListEnity,(wishlist)=>wishlist.productId)
      wishlist:WishListEnity[]
 
-     @OneToMany(()=>CartEntity,(cartItems)=>cartItems.productId)
+    @OneToMany(()=>CartEntity,(cartItems)=>cartItems.productId)
      cartItems:CartEntity[]
 }

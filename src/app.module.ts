@@ -15,7 +15,7 @@ import { MailerConfigModule } from './modules/mailer/mailer.module';
   imports: [
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
-      useFactory: (configService: ConfigService) => ({
+      useFactory: (configService: ConfigService)=>({
         type: 'postgres',
         host: configService.get('DB_HOST') || 'localhost',
         port: parseInt(configService.get('DB_PORT')) || 5432,

@@ -27,8 +27,7 @@ export class ProductService {
       newproductAlert.thickness = input.thickness;
       newproductAlert.width = input.thickness;
       newproductAlert.sku = input.sku;
-      newproductAlert.categoryId = category.categoryName;
-      console.log('the value is >>>', category.categoryName);
+      newproductAlert.categoryId = category.id;
       return await this.productRepository.save(newproductAlert);
     } catch (err) {
       throw new Error(err);
@@ -38,11 +37,11 @@ export class ProductService {
   async UpdateProduct(
     productId: string,
     updateProduct: ProductDto,
-  ): Promise<ProductsEntity> {
+  ): Promise<ProductsEntity>{
     const existingProduct = await this.productRepository.findOne({
       where: { id: productId },
     });
-    if (!existingProduct) {
+    if (!existingProduct){
       throw new NotFoundException('Product not found');
     }
     existingProduct.name = updateProduct.name;
@@ -86,23 +85,67 @@ export class ProductService {
 
     return { product, totalPages, pageNumbers };
   }
-  // get all wedding product
-  async GetProductsByCategory(
-    categoryId: string,
+
+  async getProductsByCategoryName(
+    categoryName: string,
     page: number = 1,
     perPage: number = 20,
-  ): Promise<{ productsCategory: ProductsEntity[]; totalPages: number }> {
-    const [productsCategory, total] = await this.productRepository.findAndCount(
-      {
-        where: { categoryId: categoryId },
-        order: { createdAt: 'DESC' },
-        take: perPage,
-        skip: (page - 1) * perPage,
-      },
-    );
-    const totalPages = Math.ceil(total / perPage);
+    ): Promise<{ products: ProductsEntity[]; totalPages: number,pageNumbers: number[]; }> {
+    try{
+        const category = await this.categoryRepository.findOne({
+            where: { categoryName },
+          });
 
-    return { productsCategory, totalPages };
+       
+          console.log('the value of the category is >>>', category)
+      
+          if (!category) {
+            throw new NotFoundException('Category not found');
+          }
+      
+        
+          const [products, total] = await this.productRepository.findAndCount(
+              {
+                where: { categoryId: category.id },
+                order: { createdAt: 'DESC' },
+                take: perPage,
+                skip: (page - 1) * perPage,
+              },
+            );
+            const totalPages = Math.ceil(total / perPage);
+            const pageNumbers = Array.from({ length: totalPages }, (_, i) => i + 1);
+            return { products, totalPages,pageNumbers };
+    }
+    catch(err){
+        throw new Error(err.message);
+    }
+    
+  }  
+  
+  // get all wedding product
+//   async GetProductsByCategory(
+//     categoryId: string,
+//     page: number = 1,
+//     perPage: number = 20,
+//   ): Promise<{ productsCategory: ProductsEntity[]; totalPages: number }> {
+//     const [productsCategory, total] = await this.productRepository.findAndCount(
+//       {
+//         where: { categoryId: categoryId },
+//         order: { createdAt: 'DESC' },
+//         take: perPage,
+//         skip: (page - 1) * perPage,
+//       },
+//     );
+//     const totalPages = Math.ceil(total / perPage);
+
+//     return { productsCategory, totalPages };
+//   }
+
+  async GetProductByCateGoryId():Promise<ProductsEntity>{
+    const findByCategoryId = await this.productRepository.findOne({
+        select : ["categoryId"],
+    })
+    return;
   }
   async SearchAndFilterProducts(alias: string) {
     return this.productRepository.createQueryBuilder(alias);
@@ -119,9 +162,18 @@ export class ProductService {
     return product;
   }
 
-  async getProductCategoryId(name: string): Promise<ProductCategoryEntity> {
+  
+
+  async getProductCategoryId(id: string): Promise<ProductCategoryEntity>{
     return await this.categoryRepository.findOne({
-      where: { categoryName: name },
+      where: {id},
     });
   }
+
+  async getProductCategoryByName(ProductcategoryName:string):Promise<ProductCategoryEntity>{
+    return await this.categoryRepository.findOne({
+        where:{categoryName:ProductcategoryName}
+    })
+  }
+
 }

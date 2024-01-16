@@ -23,6 +23,7 @@ import { Alias } from 'typeorm/query-builder/Alias';
 import { AuthRoles, RoleAuthGuard } from 'src/modules/authUsers/guards/roles.auth.guard';
 import { AuthUserRole } from 'src/modules/authUsers/types/auth-user.roles';
 import { JwtAuthGuard } from 'src/modules/authUsers/guards/jwt-auth.guard';
+import { ProductCategoryEntity } from '../entities/product_categories.entity';
 
 @ApiTags('Products')
 @ApiBearerAuth('JWT')
@@ -101,28 +102,45 @@ export class ProductController {
     }
   }
 
+  @Get('/category/:categoryName')
+  async getProductsByCategory(
+    @Param('categoryName') categoryName: string,
+    @Query('page') page: number = 1,
+    @Query('perPage') perPage: number = 20,
+  ) {
+    try {
+      const { products, totalPages, pageNumbers } = await this.productService.getProductsByCategoryName(categoryName, page, perPage);
+      return { products, totalPages, pageNumbers };
+    } catch (error) {
+      return { error: error.message };
+    }
+  }
+  
 
-  @Get(':categoryId')
-  @ApiQuery({
-    name: 'pageNumber', 
-    required: false,
-    explode: true,
-  })
-  @ApiResponse({
-    status: 201,
-    description: 'All products fetched successfully.',
-    type:FilterDto
-  })
-  async GetProductByCategory(
-    @Param('categoryId') categoryId:string,
-    @Query('page') page:number = 1,
-    @Query('perPage') perPage:number=20
-  ){
-   const {productsCategory,totalPages} = await this.productService.GetProductsByCategory(categoryId,page,perPage);
-   return{
-    productsCategory,totalPages
-  }
-  }
+
+
+
+  // @Get(':categoryId')
+  // @ApiQuery({
+  //   name: 'pageNumber', 
+  //   required: false,
+  //   explode: true,
+  // })
+  // @ApiResponse({
+  //   status: 201,
+  //   description: 'All products fetched successfully.',
+  //   type:FilterDto
+  // })
+  // async GetProductByCategory(
+  //   @Param('categoryId') categoryId:string,
+  //   @Query('page') page:number = 1,
+  //   @Query('perPage') perPage:number=20
+  // ){
+  //  const {productsCategory,totalPages} = await this.productService.GetProductsByCategory(categoryId,page,perPage);
+  //  return{
+  //   productsCategory,totalPages
+  // }
+  // }
   //get product by id
 
   // @AuthRoles(AuthUserRole.Admin) 

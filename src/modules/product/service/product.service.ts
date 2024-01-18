@@ -20,7 +20,7 @@ export class ProductService {
       newproductAlert.price = input.price;
       newproductAlert.images = input.image;
       newproductAlert.material = input.material;
-      newproductAlert.sizeOptions = input.sizeOptions;
+      newproductAlert.itemSizes = input.itemSizes;
       newproductAlert.stockQuantity = input.stockQuantity;
       newproductAlert.thickness = input.thickness;
       newproductAlert.width = input.thickness;

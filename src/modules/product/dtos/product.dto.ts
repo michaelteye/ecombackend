@@ -93,7 +93,6 @@ export class ProductDto{
     thickness: string;
   
     @IsArray({ message: 'Size options must be an array' })
-    @IsString({ each: true, message: 'Each size option must be a string' })
     @ApiProperty({
         type:[String],
         isArray:true ,
@@ -101,8 +100,8 @@ export class ProductDto{
         example: ['S','M','L']
 
     })
-    sizeOptions: number[];
-  
+    itemSizes: number[];
+
     @IsUUID()
     @ApiProperty({
         description: 'category id that this product belongs to',

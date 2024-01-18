@@ -37,7 +37,7 @@ export class ProductsEntity extends AbstractEntity{
     thickness:string;
 
     @Column('simple-array',{nullable:true})
-    sizeOptions:string[];
+    sizeOptions:number[];
 
     @ManyToOne(() => ProductCategoryEntity, (category) => category.products,{
         cascade: true,

@@ -1,10 +1,9 @@
-import { ProductsEntity } from '../entities/product.entity';
-import { ProductDto } from '../dtos/product.dto';
-import { Repository } from 'typeorm';
+import { NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { ProductDto } from '../dtos/product.dto';
+import { ProductsEntity } from '../entities/product.entity';
 import { ProductCategoryEntity } from '../entities/product_categories.entity';
-import { ProductCategoryDto } from '../dtos/productcategory.dto';
-import { HttpCode, NotFoundException } from '@nestjs/common';
 export class ProductService {
   constructor(
     @InjectRepository(ProductsEntity)
@@ -12,7 +11,6 @@ export class ProductService {
     @InjectRepository(ProductCategoryEntity)
     private readonly categoryRepository: Repository<ProductCategoryEntity>,
   ) {}
-
   async CreateProduct(input: ProductDto): Promise<ProductsEntity> {
     try {
       const category = await this.getProductCategoryId(input.categoryId);
@@ -82,7 +80,6 @@ export class ProductService {
     const totalPages = Math.ceil(total / perPage);
     console.log('the number of pages are given as >>>', product.length);
     const pageNumbers = Array.from({ length: totalPages }, (_, i) => i + 1);
-
     return { product, totalPages, pageNumbers };
   }
 
@@ -95,19 +92,15 @@ export class ProductService {
         const category = await this.categoryRepository.findOne({
             where: { categoryName },
           });
-
-       
           console.log('the value of the category is >>>', category)
       
           if (!category) {
             throw new NotFoundException('Category not found');
           }
-      
-        
           const [products, total] = await this.productRepository.findAndCount(
               {
                 where: { categoryId: category.id },
-                order: { createdAt: 'DESC' },
+                order: { createdAt: 'DESC'},
                 take: perPage,
                 skip: (page - 1) * perPage,
               },
@@ -119,27 +112,7 @@ export class ProductService {
     catch(err){
         throw new Error(err.message);
     }
-    
   }  
-  
-  // get all wedding product
-//   async GetProductsByCategory(
-//     categoryId: string,
-//     page: number = 1,
-//     perPage: number = 20,
-//   ): Promise<{ productsCategory: ProductsEntity[]; totalPages: number }> {
-//     const [productsCategory, total] = await this.productRepository.findAndCount(
-//       {
-//         where: { categoryId: categoryId },
-//         order: { createdAt: 'DESC' },
-//         take: perPage,
-//         skip: (page - 1) * perPage,
-//       },
-//     );
-//     const totalPages = Math.ceil(total / perPage);
-
-//     return { productsCategory, totalPages };
-//   }
 
   async GetProductByCateGoryId():Promise<ProductsEntity>{
     const findByCategoryId = await this.productRepository.findOne({
@@ -169,11 +142,4 @@ export class ProductService {
       where: {id},
     });
   }
-
-  async getProductCategoryByName(ProductcategoryName:string):Promise<ProductCategoryEntity>{
-    return await this.categoryRepository.findOne({
-        where:{categoryName:ProductcategoryName}
-    })
-  }
-
 }

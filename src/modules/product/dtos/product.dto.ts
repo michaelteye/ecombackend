@@ -101,7 +101,7 @@ export class ProductDto{
         example: ['S','M','L']
 
     })
-    sizeOptions: string[];
+    sizeOptions: number[];
   
     @IsUUID()
     @ApiProperty({

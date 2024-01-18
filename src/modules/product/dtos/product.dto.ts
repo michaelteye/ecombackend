@@ -131,7 +131,7 @@ export class FilterDto extends OmitType(ProductDto,[
     'description',
     'image',
     'material',
-    'sizeOptions',
+    'itemSizes',
     'stockQuantity',
     'thickness',
     'updatedAt',

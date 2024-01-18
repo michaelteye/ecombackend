@@ -47,7 +47,7 @@ export class ProductService {
     existingProduct.price = updateProduct.price;
     existingProduct.images = updateProduct.image;
     existingProduct.material = updateProduct.material;
-    existingProduct.sizeOptions = updateProduct.sizeOptions;
+    existingProduct.itemSizes = updateProduct.itemSizes;
     existingProduct.stockQuantity = updateProduct.stockQuantity;
     existingProduct.thickness = updateProduct.thickness;
     existingProduct.width = updateProduct.width;

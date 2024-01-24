@@ -20,7 +20,7 @@ import { ApiTags, ApiBearerAuth, ApiResponse, ApiParam, ApiQuery } from '@nestjs
 export class ReviewController {
     constructor(private productReviewService: ProductReviewService) {}
   
-    @UsePipes(new ValidationPipe())
+
     @Post('create')
     @ApiResponse({
       status: 201,
@@ -64,7 +64,6 @@ export class ReviewController {
        await this.productReviewService.DeleteReview(reviewId);
     }
   
-    @UsePipes(new ValidationPipe())
     @Get('allreviews')
     @ApiQuery({
       name: 'pageNumber',

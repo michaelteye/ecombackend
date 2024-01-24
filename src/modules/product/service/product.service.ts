@@ -83,6 +83,24 @@ export class ProductService {
     return { product, totalPages, pageNumbers };
   }
 
+  async getProductRating(productId:string):Promise<number>{
+    const product = await this.productRepository.findOne({
+      relations:['reviews'],
+      where:{id : productId}
+    })
+    if(!product){
+      throw new NotFoundException('Product not found')
+    }
+
+    const totalReviews = product.reviews.length
+    if(totalReviews === 0){
+      return 0
+    }
+
+    const totalRating = product.reviews.reduce((sum, review)=> sum + review.rating, 0)
+    return Math.round(totalRating/totalReviews)
+  }
+
   async getProductsByCategoryName(
     categoryName: string,
     page: number = 1,

@@ -24,7 +24,7 @@ export class ReviewEntity extends AbstractEntity{
     @Column('uuid')
     clientId:string
 
-    @ManyToOne(()=>ProductsEntity ,(a)=> a.product)
+    @ManyToOne(()=>ProductsEntity ,(a)=> a.reviews)
      @JoinColumn({ name: 'productId' })
      product: ProductsEntity
 

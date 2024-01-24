@@ -115,6 +115,11 @@ export class ProductController {
       return { error: error.message };
     }
   }
+
+  @Get(':productId/rating')
+  getProductRating(@Param('productId') productId:string){
+    return this.productService.getProductRating(productId);
+  }
   
 
 

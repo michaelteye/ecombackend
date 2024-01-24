@@ -51,11 +51,13 @@ export class ProductsEntity extends AbstractEntity{
     categoryId:string
 
     @OneToMany(()=>ReviewEntity, (review)=>review.product)
-     product:ReviewEntity[]
+     reviews:ReviewEntity[]
 
     @OneToMany(()=>WishListEnity,(wishlist)=>wishlist.productId)
      wishlist:WishListEnity[]
 
     @OneToMany(()=>CartEntity,(cartItems)=>cartItems.productId)
      cartItems:CartEntity[]
+    
+    
 }

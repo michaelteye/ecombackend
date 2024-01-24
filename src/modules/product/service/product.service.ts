@@ -93,12 +93,14 @@ export class ProductService {
     }
 
     const totalReviews = product.reviews.length
+    console.log('the totalReview is given as >>>',totalReviews)
     if(totalReviews === 0){
       return 0
     }
-
     const totalRating = product.reviews.reduce((sum, review)=> sum + review.rating, 0)
-    return Math.round(totalRating/totalReviews)
+    console.log('the total rating is given as >>>',totalRating)
+    console.log('the sum is given as >>>', totalRating/totalReviews)
+    return totalRating / totalReviews
   }
 
   async getProductsByCategoryName(

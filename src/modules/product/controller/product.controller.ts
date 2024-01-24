@@ -116,7 +116,7 @@ export class ProductController {
     }
   }
 
-  @Get(':productId/rating')
+  @Get('rating/:productId')
   getProductRating(@Param('productId') productId:string){
     return this.productService.getProductRating(productId);
   }

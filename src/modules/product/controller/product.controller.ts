@@ -116,8 +116,13 @@ export class ProductController {
     }
   }
   @Get('rating/:productId')
-  getProductRating(@Param('productId') productId:string){
-    return this.productService.getProductRating(productId);
+  async getProductRating(@Param('productId') productId:string){
+    try{
+       const rating = await this.productService.getProductRating(productId);
+       return {rating};
+    }catch(error){
+      return { error: 'Failed to fetch product rating' };
+    }
   }
   
 

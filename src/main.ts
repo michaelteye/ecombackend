@@ -11,6 +11,8 @@ import { WishListModule } from './modules/wishlist/wishlist.module';
 
 async function bootstrap(){
   const app = await NestFactory.create(AppModule);
+  //enable cors
+  app.enableCors()
   //setting the swagger
   const config = new DocumentBuilder() 
   .setTitle('set ring info')

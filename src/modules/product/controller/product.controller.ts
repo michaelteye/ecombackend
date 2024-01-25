@@ -24,6 +24,7 @@ import { AuthRoles, RoleAuthGuard } from 'src/modules/authUsers/guards/roles.aut
 import { AuthUserRole } from 'src/modules/authUsers/types/auth-user.roles';
 import { JwtAuthGuard } from 'src/modules/authUsers/guards/jwt-auth.guard';
 import { ProductCategoryEntity } from '../entities/product_categories.entity';
+import { ReviewEntity } from '../entities/review.entity';
 
 @ApiTags('Products')
 @ApiBearerAuth('JWT')
@@ -118,8 +119,7 @@ export class ProductController {
   @Get('rating/:productId')
   async getProductRating(@Param('productId') productId:string){
     try{
-       const rating = await this.productService.getProductRating(productId);
-       return {rating};
+       return await this.productService.getProductRating(productId);
     }catch(error){
       return { error: 'Failed to fetch product rating' };
     }
@@ -161,7 +161,12 @@ export class ProductController {
     type:ProductDto
   })
   @ApiParam({ name: 'id', required: true, type: String })
-  async getAsingleProduct(@Param('id') productId: string): Promise<ProductsEntity> {
-    return await this.productService.getProductById(productId);
+  async getAsingleProduct(@Param('id') productId: string): Promise<ProductsEntity | any> {
+    const productDetails =  await this.productService.getProductById(productId);
+    const productReviews =  await this.productService.getProductRating(productId);
+    return {
+      details:productDetails,
+      reviews:productReviews,
+    }
   }
 }

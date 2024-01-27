@@ -162,5 +162,3 @@ export class ProductService {
     });
   }
 }
-
-https://www.matellio.com/blog/how-to-build-a-project-management-app-like-asana/

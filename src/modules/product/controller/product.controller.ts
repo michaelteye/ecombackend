@@ -159,10 +159,10 @@ export class ProductController {
   @ApiParam({ name: 'id', required: true, type: String })
   async getAsingleProduct(@Param('id') productId: string): Promise<ProductsEntity | any> {
     const productDetails =  await this.productService.getProductById(productId);
-    // const productReviews =  await this.productService.getProductRating(productId);
+    const productReviews =  await this.productService.getProductRating(productId);
     return {
       details:productDetails,
-      // reviews:productReviews,
+      reviews:productReviews,
     }
   }
 }

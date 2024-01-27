@@ -113,7 +113,6 @@ export class ProductService {
             where: { categoryName },
           });
           console.log('the value of the category is >>>', category)
-      
           if (!category) {
             throw new NotFoundException('Category not found');
           }
@@ -163,3 +162,5 @@ export class ProductService {
     });
   }
 }
+
+https://www.matellio.com/blog/how-to-build-a-project-management-app-like-asana/

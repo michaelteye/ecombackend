@@ -4,6 +4,7 @@ import { Repository } from 'typeorm';
 import { ProductDto } from '../dtos/product.dto';
 import { ProductsEntity } from '../entities/product.entity';
 import { ProductCategoryEntity } from '../entities/product_categories.entity';
+import { ReviewEntity } from '../entities/review.entity';
 export class ProductService {
   constructor(
     @InjectRepository(ProductsEntity)
@@ -83,25 +84,29 @@ export class ProductService {
     return { product, totalPages, pageNumbers };
   }
 
-  async getProductRating(productId:string):Promise<number>{
+  async getProductRating(productId: string): Promise<{ totalRating: number; reviews: ReviewEntity[]; averageRating:number }> {
     const product = await this.productRepository.findOne({
-      relations:['reviews'],
-      where:{id : productId}
-    })
-    if(!product){
-      throw new NotFoundException('Product not found')
+      relations: ['reviews'],
+      where: { id: productId },
+    });
+  
+    if (!product) {
+      throw new NotFoundException('Product not found');
     }
-
-    const totalReviews = product.reviews.length
-    console.log('the totalReview is given as >>>',totalReviews)
-    if(totalReviews === 0){
-      return 0
+  
+    const totalReviews = product.reviews.length;
+    console.log('the totalReview is given as >>>', totalReviews);
+  
+    if (totalReviews === 0) {
+      return { totalRating: 0, reviews: [], averageRating:0 }; // Return 0 totalRating when there are no reviews
     }
-    const totalRating = product.reviews.reduce((sum, review)=> sum + review.rating, 0)
-    console.log('the total rating is given as >>>',totalRating)
-    console.log('the sum is given as >>>', totalRating/totalReviews)
-    return totalRating / totalReviews
+ 
+    const totalRating = product.reviews.reduce((sum, review) => sum + review.rating, 0);
+    const averageRating = totalRating / totalReviews
+    console.log('the rating can be found as >>>',averageRating)
+    return { totalRating, reviews: product.reviews, averageRating };
   }
+  
 
   async getProductsByCategoryName(
     categoryName: string,

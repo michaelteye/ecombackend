@@ -152,17 +152,29 @@ export class ProductController {
   // @UseGuards(JwtAuthGuard,RoleAuthGuard)
   @Get('item/:id')
   @ApiResponse({
-    status: 201,
-    description: 'The product has been returned.',
-    type:ProductDto
+    status: 200,
+    description: 'The product details and reviews have been returned.',
+    // type: { details: Peo; reviews: ReviewEntity[]; totalRating: number },
   })
   @ApiParam({ name: 'id', required: true, type: String })
-  async getAsingleProduct(@Param('id') productId: string): Promise<ProductsEntity | any> {
-    const productDetails =  await this.productService.getProductById(productId);
-    const productReviews =  await this.productService.getProductRating(productId);
-    return {
-      details:productDetails,
-      reviews:productReviews,
+  async getAsingleProduct(@Param('id') productId: string): Promise<{ details: ProductDto; reviews: ReviewEntity[]; totalRating: number, averageRating:number } | { message: string }> {
+    try {
+      const productDetails = await this.productService.getProductById(productId);
+      const { totalRating, reviews,averageRating } = await this.productService.getProductRating(productId);
+  
+      if (!productDetails) {
+        return { message: 'Product details not found' };
+      }
+  
+      return {
+        details: productDetails,
+        reviews,
+        totalRating,
+        averageRating
+      };
+    } catch (error) {
+      return { message: 'Failed to fetch product details and reviews' };
     }
   }
+  
 }

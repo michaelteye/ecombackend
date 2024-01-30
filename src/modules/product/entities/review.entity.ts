@@ -16,6 +16,9 @@ export class ReviewEntity extends AbstractEntity{
 
     @Column({type:'int', nullable:true, default:0})
     rating:number;
+
+    @Column({type:'text', default:0})
+    image?:string;
     
     @ManyToOne(() => Client, (user)=> user.reviews)
     @JoinColumn({name:"clientId"})

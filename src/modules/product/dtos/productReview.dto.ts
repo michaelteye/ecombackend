@@ -32,4 +32,12 @@ export class ProductReviewDto{
 
     })
     rating:number;
+
+    @IsString()
+    @ApiProperty({
+        description:'showing the ring on customers hands',
+        example:'https://www.booky.png'
+    })
+    image?:string
+
 }

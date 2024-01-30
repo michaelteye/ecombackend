@@ -84,7 +84,7 @@ export class ProductService {
     return { product, totalPages, pageNumbers };
   }
 
-  async getProductRating(productId: string): Promise<{ totalRating: number; reviews: ReviewEntity[]; averageRating:number }> {
+  async getProductRating(productId: string): Promise<{totalRating: number; reviews: ReviewEntity[]; averageRating:number }> {
     const product = await this.productRepository.findOne({
       relations: ['reviews'],
       where: { id: productId },
@@ -97,10 +97,9 @@ export class ProductService {
     const totalReviews = product.reviews.length;
     console.log('the totalReview is given as >>>', totalReviews);
   
-    if (totalReviews === 0) {
+    if (totalReviews === 0){
       return { totalRating: 0, reviews: [], averageRating:0 }; // Return 0 totalRating when there are no reviews
     }
- 
     const totalRating = product.reviews.reduce((sum, review) => sum + review.rating, 0);
     const averageRating = totalRating / totalReviews
     console.log('the rating can be found as >>>',averageRating)

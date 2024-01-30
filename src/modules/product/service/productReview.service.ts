@@ -25,6 +25,7 @@ export class ProductReviewService{
         newReview.title = input.title;
         newReview.description = input.description;
         newReview.rating = input.rating;
+        newReview.image = input.image;
         newReview.productId  = product.id
         newReview.clientId = user.id
         console.log('the new review is >>>', newReview)

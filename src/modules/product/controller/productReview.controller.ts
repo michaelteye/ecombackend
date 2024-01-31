@@ -36,7 +36,7 @@ export class ReviewController {
     description: 'The product has been successfully created.',
     type: ProductReviewDto,
   })
-  @UseInterceptors(FileInterceptor('image'))
+  @UseInterceptors(FileInterceptor('image', { dest: './uploads' }))
   //useGuard goes here
   async CreateReview(
     @UploadedFile() file,

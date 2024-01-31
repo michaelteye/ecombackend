@@ -42,6 +42,7 @@ export class ReviewController {
     @UploadedFile() file,
     @Body() productReviewDto: ProductReviewDto,
   ): Promise<ReviewEntity> {
+    console.log('the receive image is ',file)
     return await this.productReviewService.CreateProductReview({
       ...productReviewDto, image:file.filename
   });

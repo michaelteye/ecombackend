@@ -1,6 +1,8 @@
 import { ProductReviewService } from '../service/productReview.service';
 import { ReviewEntity } from '../entities/review.entity';
 import { ProductReviewDto } from '../dtos/productReview.dto';
+import { FileInterceptor } from '@nestjs/platform-express';
+
 import {
   Controller,
   Get,
@@ -11,6 +13,8 @@ import {
   Put,
   UsePipes,
   ValidationPipe,
+  UseInterceptors,
+  UploadedFile
 } from '@nestjs/common';
 import {
   ApiTags,
@@ -32,13 +36,15 @@ export class ReviewController {
     description: 'The product has been successfully created.',
     type: ProductReviewDto,
   })
+  @UseInterceptors(FileInterceptor('image'))
   //useGuard goes here
   async CreateReview(
+    @UploadedFile() file,
     @Body() productReviewDto: ProductReviewDto,
   ): Promise<ReviewEntity> {
-    return await this.productReviewService.CreateProductReview(
-      productReviewDto,
-    );
+    return await this.productReviewService.CreateProductReview({
+      ...productReviewDto, image:file.filename
+  });
   }
 
   @UsePipes(new ValidationPipe())

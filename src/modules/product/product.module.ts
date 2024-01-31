@@ -11,9 +11,15 @@ import { ProductReviewService } from "./service/productReview.service";
 import { ReviewController } from "./controller/productReview.controller";
 import { Client } from "src/modules/clients/entities/registerClient.entity";
 import { WishListEnity } from "../wishlist/entities/wishlist.entity";
+import { MulterModule } from "@nestjs/platform-express";
 
 @Module({
-    imports: [TypeOrmModule.forFeature([ProductsEntity,ProductCategoryEntity,ReviewEntity,Client,WishListEnity ])],
+    imports: [
+        MulterModule.register({
+            dest: './uploads'
+        }),
+        TypeOrmModule.forFeature([ProductsEntity,ProductCategoryEntity,ReviewEntity,Client,WishListEnity ])
+    ],
     controllers:[ProductController,CategoryController,ReviewController], 
     providers:[ProductService,CategoriesService,ProductReviewService],
     exports:[ProductService,CategoriesService,ProductReviewService]

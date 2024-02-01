@@ -2,6 +2,7 @@ import { ProductReviewService } from '../service/productReview.service';
 import { ReviewEntity } from '../entities/review.entity';
 import { ProductReviewDto } from '../dtos/productReview.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
+import { FileService } from 'src/modules/Helper/file';
 
 import {
   Controller,
@@ -28,7 +29,10 @@ import {
 @ApiBearerAuth('JWT')
 @Controller('reviews')
 export class ReviewController {
-  constructor(private productReviewService: ProductReviewService) {}
+  constructor(
+    private productReviewService: ProductReviewService,
+    private fileService:FileService
+    ) {}
 
   @Post('create')
   @ApiResponse({
@@ -41,11 +45,12 @@ export class ReviewController {
   async CreateReview(
     @UploadedFile() file,
     @Body() productReviewDto: ProductReviewDto,
-  ): Promise<ReviewEntity> {
-    console.log('the receive image is ',file)
+  ): Promise<ReviewEntity>{
+    console.log('the receive image is ', file);
     return await this.productReviewService.CreateProductReview({
-      ...productReviewDto,image: file.buffer,
-  });
+      ...productReviewDto,
+      image: file, // Pass the file directly
+    });
   }
 
   @UsePipes(new ValidationPipe())

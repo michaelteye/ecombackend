@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { UploadedFile } from '@nestjs/common';
+// import { FileUpload } from 'nestjs-form-data';
 import {
     IsString,
     IsNumber,
@@ -8,6 +8,7 @@ import {
     ArrayUnique,
     Min,
     IsUUID,
+  
 } from 'class-validator';
 
 export class ProductReviewDto{
@@ -35,7 +36,7 @@ export class ProductReviewDto{
     rating:number;
 
    
-    @IsOptional()
+    // @FileUpload({ required: true })
     @ApiProperty({
         description:'showing the ring on customers hands',
         example:'https://www.booky.png'

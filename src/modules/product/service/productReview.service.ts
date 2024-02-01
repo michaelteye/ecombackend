@@ -19,11 +19,9 @@ export class ProductReviewService{
         const newReview = new ReviewEntity()
         const productId = new ProductsEntity()
         const userId = new Client()
-
         const product = await this.getproductById(productId.id)
         const user  = await this.getUserById(userId.id)
-
-        const fileData: Buffer = Buffer.from(await this.fileService.readFile(input.image), 'base64');
+        const fileData = await this.fileService.saveFile(input.image);
 
         newReview.title = input.title;
         newReview.description = input.description;

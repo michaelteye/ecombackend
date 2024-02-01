@@ -10,6 +10,7 @@ import { ReviewController } from 'src/modules/product/controller/productReview.c
 import { ProductReviewService } from 'src/modules/product/service/productReview.service';
 import { WishListEnity } from 'src/modules/wishlist/entities/wishlist.entity';
 import { AddressEntity } from './entities/address.entity';
+import { FileService } from '../Helper/file';
 @Module({
   imports: [
     TypeOrmModule.forFeature([
@@ -22,7 +23,7 @@ import { AddressEntity } from './entities/address.entity';
     ]),
   ],
   controllers: [ClientsController, ReviewController],
-  providers: [ClientsService, ProductReviewService],
+  providers: [ClientsService, ProductReviewService,FileService],
   exports: [ClientsService],
 })
 export class ClientsModule {}

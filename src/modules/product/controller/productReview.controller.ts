@@ -36,7 +36,7 @@ export class ReviewController {
     description: 'The product has been successfully created.',
     type: ProductReviewDto,
   })
-  @UseInterceptors(FileInterceptor('image', { dest: './uploads' }))
+  @UseInterceptors(FileInterceptor('image'))
   //useGuard goes here
   async CreateReview(
     @UploadedFile() file,
@@ -44,7 +44,7 @@ export class ReviewController {
   ): Promise<ReviewEntity> {
     console.log('the receive image is ',file)
     return await this.productReviewService.CreateProductReview({
-      ...productReviewDto, image:file.filename
+      ...productReviewDto,image: file.buffer,
   });
   }
 

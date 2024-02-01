@@ -12,6 +12,7 @@ import { ReviewController } from "./controller/productReview.controller";
 import { Client } from "src/modules/clients/entities/registerClient.entity";
 import { WishListEnity } from "../wishlist/entities/wishlist.entity";
 import { MulterModule } from "@nestjs/platform-express";
+import { FileService } from "../Helper/file";
 
 @Module({
     imports: [
@@ -21,7 +22,7 @@ import { MulterModule } from "@nestjs/platform-express";
         TypeOrmModule.forFeature([ProductsEntity,ProductCategoryEntity,ReviewEntity,Client,WishListEnity ])
     ],
     controllers:[ProductController,CategoryController,ReviewController], 
-    providers:[ProductService,CategoriesService,ProductReviewService],
-    exports:[ProductService,CategoriesService,ProductReviewService]
+    providers:[ProductService,CategoriesService,ProductReviewService,FileService],
+    exports:[ProductService,CategoriesService,ProductReviewService,FileService]
 })
 export class ProductModule {}

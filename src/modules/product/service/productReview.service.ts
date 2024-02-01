@@ -5,12 +5,14 @@ import { ReviewEntity } from "../entities/review.entity";
 import { Repository } from "typeorm";
 import { ProductsEntity } from "../entities/product.entity";
 import { Client } from "src/modules/clients/entities/registerClient.entity";
+import { FileService } from "src/modules/Helper/file";
 
 export class ProductReviewService{
     constructor(
         @InjectRepository(ReviewEntity) private readonly reviewRepository:Repository<ReviewEntity>,
         @InjectRepository(ProductsEntity) private readonly productRepository:Repository<ProductsEntity>,
-        @InjectRepository(Client) private clientRepo : Repository <Client>
+        @InjectRepository(Client) private clientRepo : Repository <Client>,
+        private  fileService:FileService
     ){}
 
     async CreateProductReview(input:ProductReviewDto):Promise<ReviewEntity>{
@@ -21,11 +23,12 @@ export class ProductReviewService{
         const product = await this.getproductById(productId.id)
         const user  = await this.getUserById(userId.id)
 
+        const fileData: Buffer = Buffer.from(await this.fileService.readFile(input.image), 'base64');
 
         newReview.title = input.title;
         newReview.description = input.description;
         newReview.rating = input.rating;
-        newReview.image = Buffer.from(input.image, 'base64')
+        newReview.image = fileData
         newReview.productId  = product.id
         newReview.clientId = user.id
         console.log('the new review is >>>', newReview)
@@ -63,4 +66,22 @@ export class ProductReviewService{
         const getuserId = await this.clientRepo.findOne({where:{id:userId }})
         return getuserId
     }
+
+    private async readFile(file: File): Promise<Buffer> {
+        return new Promise((resolve, reject) => {
+          const reader = new FileReader();
+      
+          reader.onload = () => {
+            // Resolve with the buffer when the file is read
+            if (reader.result instanceof ArrayBuffer) {
+              resolve(Buffer.from(reader.result));
+            } else {
+              reject(new Error('Error reading file.'));
+            }
+          };
+      
+          // Start reading the file as an ArrayBuffer
+          reader.readAsArrayBuffer(file);
+        });
+      }
 }

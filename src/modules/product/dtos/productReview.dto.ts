@@ -1,4 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { UploadedFile } from '@nestjs/common';
 import {
     IsString,
     IsNumber,
@@ -33,11 +34,12 @@ export class ProductReviewDto{
     })
     rating:number;
 
-    @IsString()
+   
+    @IsOptional()
     @ApiProperty({
         description:'showing the ring on customers hands',
         example:'https://www.booky.png'
     })
-    image?:string
+    image: Express.Multer.File;
 
 }

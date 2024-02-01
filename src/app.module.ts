@@ -9,10 +9,22 @@ import { ProductModule } from './modules/product/product.module';
 import { CartModule } from './modules/shoppingCartsAndOrders/shoppingCartsAndOrders.module';
 import { WishListModule } from './modules/wishlist/wishlist.module';
 import { MailerConfigModule } from './modules/mailer/mailer.module';
+import { MulterModule } from '@nestjs/platform-express';
 
 
 @Module({
   imports: [
+    MulterModule.register({
+      dest: './uploads',
+      fileFilter: (req, file, callback) => {
+        if (file.mimetype.startsWith('image/')) {
+          callback(null, true);
+        } else {
+          callback(new Error("Only image uploads are allowed"), false);
+        }
+      },
+    }),
+    
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
       useFactory: (configService: ConfigService)=>({

@@ -90,7 +90,7 @@ export class ProductService {
       where: { id: productId },
     });
   
-    if (!product) {
+    if (!product){
       throw new NotFoundException('Product not found');
     }
   

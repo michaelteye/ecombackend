@@ -16,21 +16,32 @@ export class ProductReviewService{
     ){}
 
     async CreateProductReview(input:ProductReviewDto):Promise<ReviewEntity>{
-        const newReview = new ReviewEntity()
-        const productId = new ProductsEntity()
-        const userId = new Client()
-        const product = await this.getproductById(productId.id)
-        const user  = await this.getUserById(userId.id)
-        const fileData = await this.fileService.saveFile(input.image);
-
-        newReview.title = input.title;
-        newReview.description = input.description;
-        newReview.rating = input.rating;
-        newReview.image = fileData
-        newReview.productId  = product.id
-        newReview.clientId = user.id
-        console.log('the new review is >>>', newReview)
-        return await this.reviewRepository.save(newReview);
+        try{
+            const newReview = new ReviewEntity()
+            const productId = input.productId
+            const userId = input.clientId
+            const product = await this.getproductById(productId)
+            if(!product){
+                throw new NotFoundException("The product does not exist")
+            }
+            console.log('the product id is >>>', product)
+            const user  = await this.getUserById(userId)
+            if(!user){
+                throw new NotFoundException("The User Does not exist")
+            }
+            const fileData = await this.fileService.saveFile(input.image);
+            newReview.title = input.title;
+            newReview.description = input.description;
+            newReview.rating = input.rating;
+            newReview.image = fileData;
+            newReview.productId  = product.id;
+            newReview.clientId = user.id;
+            return await this.reviewRepository.save(newReview);
+        }
+        catch(err){
+            throw new Error(err.message);
+        }
+       
     }
 
     async UpdateReview(reviewId:string, updateReview:ProductReviewDto):Promise<ReviewEntity>{

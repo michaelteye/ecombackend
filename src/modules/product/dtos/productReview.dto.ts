@@ -43,4 +43,17 @@ export class ProductReviewDto{
     })
     image: Express.Multer.File;
 
+    @IsString()
+    @ApiProperty({
+        description:'the id of the product that is pass',
+        example:'c4ee7cb5-b3a5-4700-b3ae-36656cc229ee'
+    })
+    productId:string;
+
+    @IsString()
+    @ApiProperty({
+        description:'the id of the client that is pass',
+        example:'c4ee7cb5-b3a5-4700-b3ae-36656cc229ee'
+    })
+    clientId:string;
 }
